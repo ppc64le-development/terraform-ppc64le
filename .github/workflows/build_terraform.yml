@@ -27,6 +27,9 @@ jobs:
           # Mount the artifacts directory as /artifacts in the container
           dockerRunArgs: |
             --volume "${PWD}/artifacts:/artifacts"
+          
+          env: |
+            VERSION: v0.14.8
       
           run: |
             apt-get update -y
@@ -34,7 +37,7 @@ jobs:
             
             #Building terraform
             chmod +x ./build.sh
-            source ./build.sh v0.13.6
+            source ./build.sh ${VERSION}
             echo '::set-output name=RELEASE::'$TAG-$GITHUB_RUN_ID
             
             #Copy built binary file to artifacts directory
