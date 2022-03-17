@@ -34,7 +34,7 @@ jobs:
             
             #Building terraform
             chmod +x ./build.sh
-            source ./build.sh v1.0.2
+            source ./build.sh v1.0.3
             echo '::set-output name=RELEASE::'$TAG
             
             #Copy built binary file to artifacts directory
