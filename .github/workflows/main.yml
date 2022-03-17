@@ -24,12 +24,14 @@ jobs:
           
           TF_LATEST=$(curl -s https://api.github.com/repos/hashicorp/terraform/releases/latest | grep tag_name | cut -d '"' -f4)
           echo '::set-output name=LATEST_RELEASE::'$TF_LATEST
+          echo "Latest Terraform version: "$TF_LATEST
           
       - name: Get current Terraform release for Power
         id: current
         run: |
           TF_CURRENT=$(curl -s https://api.github.com/repos/ppc64le-development/terraform-ppc64le/releases/latest | grep tag_name | cut -d '"' -f4)
           echo '::set-output name=CURRENT_RELEASE::'$TF_CURRENT
+          echo "Current Terraform version on Power: "$TF_CURRENT
           
   build-new-release:
     if: ${{ needs.check-release.outputs.latest-release }} != ${{ needs.check-release.outputs.current-release }}
