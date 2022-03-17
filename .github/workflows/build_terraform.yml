@@ -27,40 +27,29 @@ jobs:
           # Mount the artifacts directory as /artifacts in the container
           dockerRunArgs: |
             --volume "${PWD}/artifacts:/artifacts"
-          
-          env: |
-            VERSION: v0.15.5
       
           run: |
             apt-get update -y
-            apt-get install -y git wget build-essential
+            apt-get install -y git wget build-essential curl
             
             #Building terraform
             chmod +x ./build.sh
-            source ./build.sh ${VERSION}
-            echo '::set-output name=RELEASE::'$TAG-$GITHUB_RUN_ID
+            source ./build.sh v0.13.0
+            echo '::set-output name=RELEASE::'$TAG
             
             #Copy built binary file to artifacts directory
-            cp $GOPATH/bin/terraform /artifacts/terraform-linux-ppc64le
+            cp $GOPATH/bin/terraform /artifacts/terraform-$TAG
+            
                       
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: ncipollo/release-action@v1
         with:
-          tag_name: ${{ steps.build.outputs.RELEASE }}
-          release_name: ${{ steps.build.outputs.RELEASE }}
+          tag: ${{ steps.build.outputs.RELEASE }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          allowUpdates: true
+          artifacts: ./artifacts/terraform-${{ steps.build.outputs.RELEASE }}
+          name: ${{ steps.build.outputs.RELEASE }}
+          replacesArtifacts: true
           draft: false
-          prerelease: false 
-          
-      - name: Upload Release Asset
-        id: upload-release-asset 
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} 
-          asset_path: ./artifacts/terraform-linux-ppc64le
-          asset_name: terraform-linux-ppc64le
-          asset_content_type: application/octet-stream
+          prerelease: false
