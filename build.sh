@@ -10,9 +10,9 @@ cd terraform
 TF_LATEST=$(curl -s https://api.github.com/repos/hashicorp/terraform/releases/latest | grep tag_name | cut -d '"' -f4)
 if [ $# -eq 0 ]
   then
-    export TAG=$1
-else
     export TAG=$TF_LATEST
+else
+    export TAG=$1
 fi
 
 git checkout tags/$TAG
