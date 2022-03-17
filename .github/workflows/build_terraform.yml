@@ -1,10 +1,7 @@
 name: Build Terraform on Power
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  workflow_call:
 
 jobs:
   build:
@@ -52,4 +49,4 @@ jobs:
           name: ${{ steps.build.outputs.RELEASE }}
           replacesArtifacts: true
           draft: false
-          prerelease: false
+          prerelease: false 
