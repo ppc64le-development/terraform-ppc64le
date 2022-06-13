@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
-      - uses: uraimo/run-on-arch-action@v2.1.1
+      - uses: uraimo/run-on-arch-action@v2.2.0
         name: Install dependencies and build Terraform
         id: build
         with:
